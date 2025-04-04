@@ -95,30 +95,47 @@
     </nav>
     <!-- Navbar End -->
 
-
-    <!-- Page Header Start -->
-    <div class="container-fluid page-header py-5 mb-5 wow fadeIn" data-wow-delay="0.1s">
-        <div class="container py-5">
-            <h1 class="display-1 text-white animated slideInDown">Mr. Jeevan Raut Residence</h1>
-            <nav aria-label="breadcrumb animated slideInDown">
-                <ol class="breadcrumb text-uppercase mb-0">
-                    <li class="breadcrumb-item"><a class="text-white" href="../../index.html">Home</a></li>
-                    <li class="breadcrumb-item"><a class="text-white" href="#">Projects</a></li>
-                    <li class="breadcrumb-item"><a class="text-white" href="index.html">Residential</a></li>
-                    <li class="breadcrumb-item text-primary active" aria-current="page">Jeevan Raut</li>
-                </ol>
-            </nav>
-        </div>
-    </div>
-    <!-- Page Header End -->
-
-
     <!-- Project Detail Start -->
     <div class="container-xxl py-5">
         <div class="container">
             <div class="row g-5">
-                <div class="col-lg-8 wow fadeInUp" data-wow-delay="0.1s">
-                    <h1 class="mb-4">Contemporary Family Residence</h1>
+                <div class="col-lg-12 wow fadeInUp" data-wow-delay="0.1s">
+                    <h1 class="mb-3">Mr. Jeevan Raut</h1>
+                    <nav aria-label="breadcrumb">
+                        <style>
+                            /* Custom breadcrumb styling */
+                            .custom-breadcrumb {
+                                display: flex;
+                                flex-wrap: wrap;
+                                margin-bottom: 1.5rem;
+                                background-color: #f8f9fa;
+                                border-radius: 0.25rem;
+                            }
+                            .custom-breadcrumb-item {
+                                display: flex;
+                                align-items: center;
+                            }
+                            .custom-breadcrumb-item a {
+                                color: #212529;
+                                text-decoration: none;
+                            }
+                            .custom-breadcrumb-item:not(:first-child)::before {
+                                content: "/";
+                                padding-left: 0.5rem;
+                                padding-right: 0.5rem;
+                                color: #6c757d;
+                            }
+                            .custom-breadcrumb-item:last-child {
+                                color: var(--bs-primary);
+                            }
+                        </style>
+                        <div class="custom-breadcrumb">
+                            <div class="custom-breadcrumb-item"><a href="../../index.html">Home</a></div>
+                            <div class="custom-breadcrumb-item"><a href="#">Projects</a></div>
+                            <div class="custom-breadcrumb-item"><a href="index.html">Residential</a></div>
+                            <div class="custom-breadcrumb-item">Jeevan Raut</div>
+                        </div>
+                    </nav>
                     <p class="mb-4">This modern residential project for Mr. Jeevan Raut offers a perfect blend of aesthetic appeal and functional living spaces. The design emphasizes natural light and ventilation while maintaining privacy for the residents.</p>
                     
                     <!-- Project Gallery -->
@@ -172,8 +189,8 @@
                             }
                             
                             .lightbox-image {
-                                max-width: 95%;
-                                max-height: 90vh;
+                                max-width: 80%;
+                                max-height: 80vh;
                                 object-fit: contain;
                             }
                             
@@ -185,6 +202,60 @@
                                 font-size: 30px;
                                 cursor: pointer;
                                 z-index: 10000;
+                            }
+                            
+                            .lightbox-nav {
+                                position: absolute;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                display: flex;
+                                justify-content: space-between;
+                                align-items: center;
+                                pointer-events: none; /* This allows clicks to pass through to the lightbox background */
+                            }
+                            
+                            .lightbox-prev, 
+                            .lightbox-next {
+                                background: rgba(255,255,255,0.2);
+                                color: white;
+                                border: none;
+                                border-radius: 50%;
+                                width: 50px;
+                                height: 50px;
+                                font-size: 30px;
+                                line-height: 0; /* Help center the arrow character */
+                                cursor: pointer;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                z-index: 10000;
+                                transition: background-color 0.3s;
+                                pointer-events: auto; /* Re-enable pointer events for the buttons */
+                                margin: 0 15px; /* Add some spacing from the edges */
+                            }
+                            
+                            .lightbox-prev:hover, 
+                            .lightbox-next:hover {
+                                background-color: rgba(255,255,255,0.4);
+                            }
+                            
+                            .lightbox-close-btn {
+                                position: absolute;
+                                bottom: 30px;
+                                background-color: rgba(255,255,255,0.2);
+                                color: white;
+                                border: none;
+                                border-radius: 5px;
+                                padding: 10px 20px;
+                                font-size: 16px;
+                                cursor: pointer;
+                                transition: background-color 0.3s;
+                            }
+                            
+                            .lightbox-close-btn:hover {
+                                background-color: rgba(255,255,255,0.4);
                             }
 
                             @media (max-width: 768px) {
@@ -201,7 +272,12 @@
                         <!-- Lightbox container -->
                         <div id="image-lightbox" class="lightbox">
                             <span class="lightbox-close">&times;</span>
+                            <div class="lightbox-nav">
+                                <button class="lightbox-prev">&lsaquo;</button>
+                                <button class="lightbox-next">&rsaquo;</button>
+                            </div>
                             <img class="lightbox-image" id="lightbox-img" src="" alt="Enlarged Image">
+                            <button class="lightbox-close-btn">Close</button>
                         </div>
                         
                         <!-- JavaScript for lightbox functionality -->
@@ -212,19 +288,52 @@
                                 const lightbox = document.getElementById('image-lightbox');
                                 const lightboxImg = document.getElementById('lightbox-img');
                                 const lightboxClose = document.querySelector('.lightbox-close');
+                                const lightboxCloseBtn = document.querySelector('.lightbox-close-btn');
+                                const lightboxNext = document.querySelector('.lightbox-next');
+                                const lightboxPrev = document.querySelector('.lightbox-prev');
+                                
+                                let currentIndex = 0;
+                                const images = Array.from(galleryItems).map(item => item.querySelector('img').src);
+                                
+                                // Function to show image at specific index
+                                function showImage(index) {
+                                    currentIndex = index;
+                                    lightboxImg.src = images[currentIndex];
+                                }
                                 
                                 // Add click event to each gallery item
-                                galleryItems.forEach(item => {
+                                galleryItems.forEach((item, index) => {
                                     item.addEventListener('click', function() {
-                                        const imgSrc = this.querySelector('img').src;
-                                        lightboxImg.src = imgSrc;
+                                        currentIndex = index;
+                                        showImage(currentIndex);
                                         lightbox.classList.add('active');
                                         document.body.style.overflow = 'hidden'; // Prevent scrolling
                                     });
                                 });
                                 
-                                // Close lightbox when clicking the close button
+                                // Next button
+                                lightboxNext.addEventListener('click', function(e) {
+                                    e.stopPropagation(); // Prevent lightbox from closing
+                                    currentIndex = (currentIndex + 1) % images.length;
+                                    showImage(currentIndex);
+                                });
+                                
+                                // Previous button
+                                lightboxPrev.addEventListener('click', function(e) {
+                                    e.stopPropagation(); // Prevent lightbox from closing
+                                    currentIndex = (currentIndex - 1 + images.length) % images.length;
+                                    showImage(currentIndex);
+                                });
+                                
+                                // Close lightbox when clicking the X button
                                 lightboxClose.addEventListener('click', function() {
+                                    lightbox.classList.remove('active');
+                                    document.body.style.overflow = 'auto'; // Enable scrolling
+                                });
+                                
+                                // Close lightbox when clicking the Close button
+                                lightboxCloseBtn.addEventListener('click', function(e) {
+                                    e.stopPropagation(); // Prevent other events
                                     lightbox.classList.remove('active');
                                     document.body.style.overflow = 'auto'; // Enable scrolling
                                 });
@@ -237,9 +346,17 @@
                                     }
                                 });
                                 
-                                // Close lightbox with Escape key
+                                // Navigate with arrow keys
                                 document.addEventListener('keydown', function(e) {
-                                    if (e.key === 'Escape' && lightbox.classList.contains('active')) {
+                                    if (!lightbox.classList.contains('active')) return;
+                                    
+                                    if (e.key === 'ArrowRight') {
+                                        currentIndex = (currentIndex + 1) % images.length;
+                                        showImage(currentIndex);
+                                    } else if (e.key === 'ArrowLeft') {
+                                        currentIndex = (currentIndex - 1 + images.length) % images.length;
+                                        showImage(currentIndex);
+                                    } else if (e.key === 'Escape') {
                                         lightbox.classList.remove('active');
                                         document.body.style.overflow = 'auto'; // Enable scrolling
                                     }
@@ -257,7 +374,6 @@
                             <div class="gallery-item">
                                 <img src="../../img/projects/residential/jeevan_raut/2.jpg" alt="Mr. Jeevan Raut Residence">
                             </div>
-                            
                         </div>
                     </div>
                     
@@ -288,42 +404,6 @@
                                     <h5 class="text-nowrap me-3 mb-0">Type:</h5>
                                     <span>Residential</span>
                                 </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Sidebar -->
-                <div class="col-lg-4 wow fadeInUp" data-wow-delay="0.5s">
-                    <!-- Other Projects -->
-                    <div class="bg-light p-4 rounded">
-                        <h3 class="mb-4">Other Residential Projects</h3>
-                        <div class="d-flex align-items-center mb-4">
-                            <img class="flex-shrink-0 rounded" src="../../img/projects/residential/adesh_tapare/2.jpg" alt="" style="width: 70px;">
-                            <div class="ms-4">
-                                <h6 class="mb-1">Mr. Adesh Tapare Residence</h6>
-                                <a href="adesh-tapare.html" class="btn btn-outline-primary btn-sm">View Details</a>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <img class="flex-shrink-0 rounded" src="../../img/projects/residential/amar_pol/10.jpg" alt="" style="width: 70px;">
-                            <div class="ms-4">
-                                <h6 class="mb-1">Mr. Amar Pol Residence</h6>
-                                <a href="amar-pol.html" class="btn btn-outline-primary btn-sm">View Details</a>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center mb-4">
-                            <img class="flex-shrink-0 rounded" src="../../img/projects/residential/sameer_kazi/4.jpg" alt="" style="width: 70px;">
-                            <div class="ms-4">
-                                <h6 class="mb-1">Mr. Sameer Kazi Residence</h6>
-                                <a href="sameer-kazi.html" class="btn btn-outline-primary btn-sm">View Details</a>
-                            </div>
-                        </div>
-                        <div class="d-flex align-items-center">
-                            <img class="flex-shrink-0 rounded" src="../../img/projects/residential/siddharth_nimbalkar/3.jpg" alt="" style="width: 70px;">
-                            <div class="ms-4">
-                                <h6 class="mb-1">Mr. Siddharth Nimbalkar Residence</h6>
-                                <a href="siddharth-nimbalkar.html" class="btn btn-outline-primary btn-sm">View Details</a>
                             </div>
                         </div>
                     </div>
