@@ -41,10 +41,10 @@
 
 
     // Facts counter
-    $('[data-toggle="counter-up"]').counterUp({
-        delay: 5,
-        time: 100
-    });
+    // $('[data-toggle="counter-up"]').counterUp({
+    //     delay: 5,
+    //     time: 100
+    // });
 
 
     // Date and time picker
